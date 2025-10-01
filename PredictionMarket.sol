@@ -56,10 +56,23 @@ contract PredictionMarket {
     // --- Functions ---
 
     /**
-     * @dev Sets the contract owner upon deployment.
+     * @dev Sets the contract owner and pre-configures price feeds for Base mainnet.
      */
     constructor() {
         owner = msg.sender;
+
+        // Pre-configure price feeds for Base mainnet
+        // These are the addresses for wrapped tokens and their corresponding oracles.
+        // Users will make predictions against these token addresses.
+
+        // ETH/USD -> WETH on Base
+        setPriceFeed(0x4200000000000000000000000000000000000006, 0x4aDC67696bA383F43DD60A9eA08325Ac242A4b93);
+
+        // BTC/USD -> WBTC on Base
+        setPriceFeed(0x1ceA84203673764245E35e2154A8563d2574A049, 0x042264344422c42661571052A36A021235636594);
+
+        // SOL/USD -> Wrapped SOL on Base
+        setPriceFeed(0x2d346c4593E2548148a0747a7536A444C901844a, 0x000216E161f32a334850125471452652ac226767);
     }
 
     /**

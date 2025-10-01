@@ -13,19 +13,19 @@ This project is a decentralized prediction market application. Users can predict
 ## Smart Contract (`PredictionMarket.sol`)
 - **Solidity Version:** Uses `^0.8.20`.
 - **Chainlink Integration:** Imports `AggregatorV3Interface.sol` to fetch token prices.
+- **Pre-configured Oracles:** The contract is pre-configured on deployment with the Chainlink price feed addresses for ETH, BTC, and SOL on the Base mainnet.
+- **Owner-Managed Oracles:** The contract owner can add or update price feed oracles for any token using the `setPriceFeed` function.
 - **PredictionChoice Enum:** `High` and `Low` options for predictions.
 - **PredictionResult Enum:** `Pending`, `Won`, and `Lost` to track the outcome of a prediction.
 - **Commit Function:** `commit(bytes32 _commitment)` allows users to submit a hash of their prediction.
 - **Reveal Function:** `reveal(address _token, uint256 _predictedPrice, PredictionChoice _choice, uint256 _targetTimestamp, bytes32 _salt)` allows users to reveal their prediction after the commitment phase.
-- **CheckPrice Function:** `checkPrice(bytes32 _commitment, address _priceFeed)` allows anyone to trigger the price check and determine the winner after 24 hours.
-- **Events:** Emits `PredictionCommitted`, `PredictionRevealed`, and `PredictionOutcome` for off-chain services to track.
+- **CheckPrice Function:** `checkPrice(bytes32 _commitment)` allows anyone to trigger the price check and determine the winner after 24 hours.
+- **Events:** Emits `PredictionCommitted`, `PredictionRevealed`, `PredictionOutcome`, and `PriceFeedSet` for off-chain services to track.
 
 # Current Plan
 
-The current goal is to refactor the contract to manage oracle addresses internally, making it more secure and user-friendly.
+The current goal is to pre-configure the smart contract with the necessary price feed addresses for popular cryptocurrencies, making it ready for immediate use upon deployment.
 
 ## Steps:
-1.  **Add Owner and Modifier:** Introduce an `owner` variable, a `constructor` to set the owner, and an `onlyOwner` modifier for access control.
-2.  **Add Price Feed Mapping:** Create a `mapping(address => address)` named `priceFeeds` to store the approved oracle address for each token.
-3.  **Create `setPriceFeed` Function:** Implement an `onlyOwner` function that allows the contract owner to add or update the price feed address for a specific token.
-4.  **Refactor `checkPrice`:** Modify the function to remove the `_priceFeed` argument. It will now automatically look up the correct oracle address from the `priceFeeds` mapping based on the token address associated with the prediction.
+1.  **Update Constructor:** Modify the contract's `constructor` to set the initial price feed addresses.
+2.  **Add ETH, BTC, SOL:** In the constructor, populate the `priceFeeds` mapping with the official token and oracle addresses for ETH, BTC, and SOL on the Base mainnet.
