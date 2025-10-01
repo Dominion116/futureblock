@@ -18,8 +18,7 @@ This project is a decentralized prediction market application. Users can predict
 - **Commit Function:** `commit(bytes32 _commitment)` allows users to submit a hash of their prediction.
 - **Reveal Function:** `reveal(address _token, uint256 _predictedPrice, PredictionChoice _choice, uint256 _targetTimestamp, bytes32 _salt)` allows users to reveal their prediction after the commitment phase.
 - **CheckPrice Function:** `checkPrice(bytes32 _commitment, address _priceFeed)` allows anyone to trigger the price check and determine the winner after 24 hours.
-- **Events:** Emits `PredictionCommitted`, `PredictionRevealed`, and `PredictionResult` for off-chain services to track.
-- **Data Structures:** Uses a `Prediction` struct and mappings to store commitments and revealed predictions.
+- **Events:** Emits `PredictionCommitted`, `PredictionRevealed`, and `PredictionOutcome` for off-chain services to track.
 
 # Current Plan
 
@@ -38,4 +37,4 @@ The current goal is to enhance the smart contract with price checking and win/lo
     *   Compare the current price to the predicted price.
     *   Determine if the user won or lost based on their `PredictionChoice`.
     *   Update the prediction's result.
-    *   Emit a `PredictionResult` event.
+    *   Emit a `PredictionOutcome` event.

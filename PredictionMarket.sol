@@ -71,7 +71,7 @@ contract PredictionMarket {
         PredictionChoice choice,
         uint256 targetTimestamp
     );
-    event PredictionResult(bytes32 indexed commitment, PredictionResult result);
+    event PredictionOutcome(bytes32 indexed commitment, PredictionResult result);
 
     /**
      * @dev Commits a prediction.
@@ -173,6 +173,6 @@ contract PredictionMarket {
             }
         }
 
-        emit PredictionResult(_commitment, prediction.result);
+        emit PredictionOutcome(_commitment, prediction.result);
     }
 }
