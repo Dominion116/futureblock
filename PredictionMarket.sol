@@ -7,32 +7,10 @@ pragma solidity ^0.8.20;
  */
 interface AggregatorV3Interface {
   function decimals() external view returns (uint8);
-
   function description() external view returns (string memory);
-
   function version() external view returns (uint256);
-
-  function getRoundData(uint80 _roundId)
-    external
-    view
-    returns (
-      uint80 roundId,
-      int256 answer,
-      uint256 startedAt,
-      uint256 updatedAt,
-      uint80 answeredInRound
-    );
-
-  function latestRoundData()
-    external
-    view
-    returns (
-      uint80 roundId,
-      int256 answer,
-      uint256 startedAt,
-      uint256 updatedAt,
-      uint80 answeredInRound
-    );
+  function getRoundData(uint80 _roundId) external view returns (uint80 roundId, int256 answer, uint256 startedAt, uint256 updatedAt, uint80 answeredInRound);
+  function latestRoundData() external view returns (uint80 roundId, int256 answer, uint256 startedAt, uint256 updatedAt, uint80 answeredInRound);
 }
 
 /**
@@ -40,18 +18,16 @@ interface AggregatorV3Interface {
  * @dev A simple prediction market contract using a commit-reveal scheme.
  */
 contract PredictionMarket {
-    enum PredictionChoice {
-        High,
-        Low
-    }
+    // --- State Variables ---
 
-    enum PredictionResult {
-        Pending,
-        Won,
-        Lost
-    }
+    address public owner;
+    mapping(address => address) public priceFeeds; // Mapping from token address to price feed address
+
+    enum PredictionChoice { High, Low }
+    enum PredictionResult { Pending, Won, Lost }
 
     struct Prediction {
+        address user;
         address token;
         uint256 predictedPrice;
         uint256 targetTimestamp;
@@ -63,15 +39,40 @@ contract PredictionMarket {
     mapping(address => bytes32) public commitments;
     mapping(bytes32 => Prediction) public predictions;
 
+    // --- Events ---
+
     event PredictionCommitted(address indexed user, bytes32 commitment);
-    event PredictionRevealed(
-        address indexed user,
-        address indexed token,
-        uint256 predictedPrice,
-        PredictionChoice choice,
-        uint256 targetTimestamp
-    );
+    event PredictionRevealed(address indexed user, address indexed token, uint256 predictedPrice, PredictionChoice choice, uint256 targetTimestamp);
     event PredictionOutcome(bytes32 indexed commitment, PredictionResult result);
+    event PriceFeedSet(address indexed token, address indexed priceFeed);
+
+    // --- Modifiers ---
+
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Only the owner can call this function");
+        _;
+    }
+
+    // --- Functions ---
+
+    /**
+     * @dev Sets the contract owner upon deployment.
+     */
+    constructor() {
+        owner = msg.sender;
+    }
+
+    /**
+     * @dev Allows the owner to set or update the price feed address for a given token.
+     * @param _token The address of the token (e.g., WETH).
+     * @param _priceFeed The address of the Chainlink data feed for that token.
+     */
+    function setPriceFeed(address _token, address _priceFeed) public onlyOwner {
+        require(_token != address(0), "Invalid token address");
+        require(_priceFeed != address(0), "Invalid price feed address");
+        priceFeeds[_token] = _priceFeed;
+        emit PriceFeedSet(_token, _priceFeed);
+    }
 
     /**
      * @dev Commits a prediction.
@@ -112,12 +113,12 @@ contract PredictionMarket {
             )
         );
 
-        require(
-            commitment == calculatedCommitment,
-            "Calculated commitment does not match stored commitment"
-        );
+        require(commitment == calculatedCommitment, "Calculated commitment does not match stored commitment");
+        require(priceFeeds[_token] != address(0), "Price feed not set for this token");
+
 
         predictions[commitment] = Prediction({
+            user: msg.sender,
             token: _token,
             predictedPrice: _predictedPrice,
             targetTimestamp: _targetTimestamp,
@@ -140,21 +141,17 @@ contract PredictionMarket {
     /**
      * @dev Checks the price and determines the winner.
      * @param _commitment The commitment of the prediction to check.
-     * @param _priceFeed The address of the Chainlink price feed.
      */
-    function checkPrice(bytes32 _commitment, address _priceFeed) public {
+    function checkPrice(bytes32 _commitment) public {
         Prediction storage prediction = predictions[_commitment];
         require(prediction.revealed, "Prediction not revealed");
-        require(
-            block.timestamp > prediction.targetTimestamp + 24 hours,
-            "Prediction window not over"
-        );
-        require(
-            prediction.result == PredictionResult.Pending,
-            "Prediction already resolved"
-        );
+        require(block.timestamp > prediction.targetTimestamp + 24 hours, "Prediction window not over");
+        require(prediction.result == PredictionResult.Pending, "Prediction already resolved");
 
-        AggregatorV3Interface priceFeed = AggregatorV3Interface(_priceFeed);
+        address priceFeedAddress = priceFeeds[prediction.token];
+        require(priceFeedAddress != address(0), "Price feed not set for this token");
+
+        AggregatorV3Interface priceFeed = AggregatorV3Interface(priceFeedAddress);
         (, int256 price, , , ) = priceFeed.latestRoundData();
 
         uint256 currentPrice = uint256(price);
@@ -165,7 +162,7 @@ contract PredictionMarket {
             } else {
                 prediction.result = PredictionResult.Lost;
             }
-        } else {
+        } else { // PredictionChoice.Low
             if (currentPrice < prediction.predictedPrice) {
                 prediction.result = PredictionResult.Won;
             } else {

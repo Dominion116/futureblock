@@ -1,6 +1,6 @@
 # Project Overview
 
-This project is a decentralized prediction market application. Users can predict the future price of a token at a specific time. The application is designed to be transparent and fair, using a commit-reveal scheme to prevent front-running and ensure honest competition.
+This project is a decentralized prediction market application. Users can predict the future price of a token at a specific time. The application is designed to be transparent and fair, using a commit-reveal scheme to prevent front-running and honest competition.
 
 # Implemented Features
 
@@ -22,19 +22,10 @@ This project is a decentralized prediction market application. Users can predict
 
 # Current Plan
 
-The current goal is to enhance the smart contract with price checking and win/loss determination logic.
+The current goal is to refactor the contract to manage oracle addresses internally, making it more secure and user-friendly.
 
 ## Steps:
-1.  **Update `PredictionMarket.sol`:** Modify the existing Solidity smart contract.
-2.  **Integrate Chainlink:** Import the `AggregatorV3Interface` to fetch price data.
-3.  **Add PredictionChoice:** Create an enum to represent `High` and `Low` prediction choices.
-4.  **Add PredictionResult:** Create an enum to track the state of a prediction (`Pending`, `Won`, `Lost`).
-5.  **Update `Prediction` Struct:** Add fields for the user's choice and the result of the prediction.
-6.  **Modify `reveal` function:** Include the `PredictionChoice` as a parameter.
-7.  **Implement `checkPrice` function:** This function will:
-    *   Be callable after 24 hours.
-    *   Fetch the current price from a Chainlink data feed.
-    *   Compare the current price to the predicted price.
-    *   Determine if the user won or lost based on their `PredictionChoice`.
-    *   Update the prediction's result.
-    *   Emit a `PredictionOutcome` event.
+1.  **Add Owner and Modifier:** Introduce an `owner` variable, a `constructor` to set the owner, and an `onlyOwner` modifier for access control.
+2.  **Add Price Feed Mapping:** Create a `mapping(address => address)` named `priceFeeds` to store the approved oracle address for each token.
+3.  **Create `setPriceFeed` Function:** Implement an `onlyOwner` function that allows the contract owner to add or update the price feed address for a specific token.
+4.  **Refactor `checkPrice`:** Modify the function to remove the `_priceFeed` argument. It will now automatically look up the correct oracle address from the `priceFeeds` mapping based on the token address associated with the prediction.
