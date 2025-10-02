@@ -1,24 +1,30 @@
-# Project Overview
+# FutureBlock: A Decentralized Prediction Market
 
-This project is a decentralized prediction market application. Users can predict the future price of a token at a specific time. The application is designed to be transparent and fair, using a commit-reveal scheme to prevent front-running and honest competition.
+## Overview
 
-# Implemented Features
+FutureBlock is a decentralized prediction market built on the Base blockchain. It allows users to predict the future price of cryptocurrencies like ETH, BTC, and SOL. The application uses a commit-reveal scheme to ensure fair and transparent predictions and leverages Chainlink oracles for reliable price data.
 
-## Smart Contract (`PredictionMarket.sol`)
-- **Solidity Version:** Uses `^0.8.20`.
-- **Chainlink Integration:** Imports `AggregatorV3Interface.sol` to fetch token prices.
-- **Pre-configured Oracles:** The contract is pre-configured on deployment with the Chainlink price feed addresses for ETH, BTC, and SOL on the Base mainnet.
-- **Owner-Managed Oracles:** The contract owner can add or update price feed oracles for any token using the `setPriceFeed` function.
-- **PredictionChoice Enum:** `High` and `Low` options for predictions.
-- **PredictionResult Enum:** `Pending`, `Won`, and `Lost` to track the outcome of a prediction.
-- **Commit-Reveal Scheme:** A two-step process for submitting predictions to ensure fairness.
+## Design and Style
 
-# Current Plan
+The application features a dark, modern aesthetic inspired by the provided design, with a deep purple and indigo background and vibrant purple and blue highlights. The UI is designed to be intuitive and responsive, providing a great user experience on both desktop and mobile devices.
 
-The current goal is to build a user-friendly frontend for the prediction market application, starting with a dedicated landing page inspired by Uniswap's dark mode UI.
+### Key Design Elements:
 
-## Steps:
-1.  **Restructure Pages:** Rename the existing `index.tsx` to `app.tsx` to serve as the main application page. Create a new `index.tsx` to act as the project's landing page.
-2.  **Design Landing Page:** Create a landing page with a hero section, an explanation of the commit-reveal process, and a showcase of the application's features.
-3.  **Apply Uniswap-Style UI:** Implement a dark theme with a modern, clean aesthetic, focusing on typography and user experience.
-4.  **Add Navigation:** Include a "Launch App" button on the landing page that directs users to the main prediction application.
+*   **Color Palette:** Deep purple and indigo background with vibrant purple and blue highlights.
+*   **Glowing Background Effect:** A central glow to create depth and focus.
+*   **Modern Navigation Bar:** A clean and simple header with navigation links.
+*   **Typography:** Large, impactful headlines and clean text.
+*   **Buttons:** Modern button styles with gradients and glows.
+
+## Features
+
+*   **Decentralized Predictions:** Users can make predictions on the future price of major cryptocurrencies.
+*   **Commit-Reveal Scheme:** Predictions are kept secret until the reveal phase, ensuring a fair and transparent market.
+*   **Chainlink Oracles:** The application uses Chainlink's decentralized oracles to get reliable, real-world price data.
+*   **Wallet Integration:** Users can connect their MetaMask (or other browser-based) wallets to interact with the application.
+*   **Prediction Management:** Users can view their prediction history and manage their active predictions.
+
+## Current Plan: Initial Deployment
+
+*   **Build the Project:** Build the Next.js application for production.
+*   **Deploy to Firebase Hosting:** Deploy the built application to Firebase Hosting for public access.
