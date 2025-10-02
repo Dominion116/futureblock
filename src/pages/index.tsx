@@ -1,115 +1,175 @@
-import Image from "next/image";
-import { Geist, Geist_Mono } from "next/font/google";
+import type { NextPage } from 'next';
+import Head from 'next/head';
+import Link from 'next/link';
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
-export default function Home() {
+const LandingPage: NextPage = () => {
   return (
-    <div
-      className={`${geistSans.className} ${geistMono.className} font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20`}
-    >
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/pages/index.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
+    <div className="container">
+      <Head>
+        <title>FutureBlock | Prediction Market</title>
+        <meta name="description" content="A decentralized prediction market on Base." />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+
+      <main className="main">
+        <header className="header">
+          <h1 className="title">FutureBlock</h1>
+          <p className="description">Decentralized Predictions on Base</p>
+        </header>
+
+        <section className="hero">
+          <h2 className="heroTitle">Predict the Future of Crypto</h2>
+          <p className="heroSubtitle">
+            A fair, transparent, and decentralized prediction market powered by Chainlink.
+          </p>
+          <Link href="/app" className="launchButton">
+            Launch App
+          </Link>
+        </section>
+
+        <section className="features">
+          <div className="featureCard">
+            <h3>Commit-Reveal Scheme</h3>
+            <p>Your predictions are kept secret until the reveal phase, ensuring a fair and transparent market.</p>
+          </div>
+          <div className="featureCard">
+            <h3>Powered by Chainlink</h3>
+            <p>We use Chainlink's decentralized oracles to get reliable, real-world price data.</p>
+          </div>
+          <div className="featureCard">
+            <h3>Predict on Major Tokens</h3>
+            <p>Make predictions on the future price of ETH, BTC, and SOL, with more to come.</p>
+          </div>
+        </section>
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+
+      <footer className="footer">
+        <p>Built on Base. Powered by Chainlink.</p>
       </footer>
+
+      <style jsx>{`
+        .container {
+          min-height: 100vh;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          background-color: #1a1a1a; /* Dark background */
+          color: #ffffff; /* Light text */
+          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+        }
+
+        .main {
+          padding: 5rem 0;
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+        }
+
+        .header {
+          width: 100%;
+          padding: 1rem;
+          text-align: center;
+        }
+
+        .title {
+          margin: 0;
+          line-height: 1.15;
+          font-size: 4rem;
+        }
+
+        .description {
+          line-height: 1.5;
+          font-size: 1.5rem;
+        }
+
+        .hero {
+          text-align: center;
+          padding: 4rem 2rem;
+          border-radius: 12px;
+          background-color: #2a2a2a; /* Slightly lighter dark shade */
+          margin: 2rem 0;
+        }
+
+        .heroTitle {
+          font-size: 3rem;
+          margin-bottom: 1rem;
+        }
+
+        .heroSubtitle {
+          font-size: 1.25rem;
+          margin-bottom: 2rem;
+        }
+
+        .launchButton {
+          display: inline-block;
+          padding: 1rem 2rem;
+          font-size: 1.25rem;
+          color: #ffffff;
+          background-color: #0070f3; /* Accent color */
+          border: none;
+          border-radius: 8px;
+          text-decoration: none;
+          cursor: pointer;
+          transition: background-color 0.2s;
+        }
+
+        .launchButton:hover {
+          background-color: #0056b3;
+        }
+
+        .features {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
+          max-width: 800px;
+          margin-top: 3rem;
+        }
+
+        .featureCard {
+          margin: 1rem;
+          padding: 1.5rem;
+          text-align: left;
+          color: inherit;
+          text-decoration: none;
+          border: 1px solid #eaeaea;
+          border-radius: 10px;
+          transition: color 0.15s ease, border-color 0.15s ease;
+          width: 45%;
+          background-color: #2a2a2a; /* Slightly lighter dark shade */
+        }
+
+        .featureCard:hover,
+        .featureCard:focus,
+        .featureCard:active {
+          color: #0070f3;
+          border-color: #0070f3;
+        }
+
+        .featureCard h3 {
+          margin: 0 0 1rem 0;
+          font-size: 1.5rem;
+        }
+
+        .featureCard p {
+          margin: 0;
+          font-size: 1.25rem;
+          line-height: 1.5;
+        }
+
+        .footer {
+          width: 100%;
+          height: 100px;
+          border-top: 1px solid #eaeaea;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+      `}</style>
     </div>
   );
-}
+};
+
+export default LandingPage;
